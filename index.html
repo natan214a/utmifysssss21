@@ -1,11 +1,77 @@
-  <!DOCTYPE html>
-  <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste de Funcionamento</title>
-  </head>
-  <body>
-    <h1>Se você está vendo esta mensagem, o site está funcionando!</h1>
-  </body>
-  </html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notificações Automáticas UTMify</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    button {
+      background-color: #0050ff;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>UTMify Notificações Automáticas</h2>
+  <p>Deixe esta aba aberta no Safari para receber notificações automáticas.</p>
+  <button id="startBtn">Ativar Notificações</button>
+
+  <script>
+    const valores = ["R$18,99", "R$24,99", "R$44,99", "R$38,00"];
+    let intervaloMin = 15; // mínimo em minutos entre notificações
+    let intervaloMax = 30; // máximo em minutos
+
+    document.getElementById("startBtn").addEventListener("click", async () => {
+      if (!("Notification" in window)) {
+        alert("Seu navegador não suporta notificações.");
+        return;
+      }
+
+      let permission = Notification.permission;
+      if (permission === "default") {
+        permission = await Notification.requestPermission();
+      }
+
+      if (permission !== "granted") {
+        alert("Permissão negada.");
+        return;
+      }
+
+      alert("Notificações ativadas! Deixe essa aba aberta.");
+
+      startNotificacoesAutomaticas();
+    });
+
+    function startNotificacoesAutomaticas() {
+      function exibirNotificacao() {
+        const valor = valores[Math.floor(Math.random() * valores.length)];
+        new Notification("Venda aprovada", {
+          body: `Valor: ${valor}`,
+          icon: "https://i.ibb.co/j9JC8qw3/utmify.png",
+          tag: "utmify-auto",
+          renotify: true
+        });
+
+        // Agendar próxima notificação
+        const proximoTempoMin = intervaloMin * 60 * 1000;
+        const proximoTempoMax = intervaloMax * 60 * 1000;
+        const tempoAleatorio = Math.floor(Math.random() * (proximoTempoMax - proximoTempoMin)) + proximoTempoMin;
+
+        setTimeout(exibirNotificacao, tempoAleatorio);
+      }
+
+      exibirNotificacao();
+    }
+  </script>
+</body>
+</html>
