@@ -20,10 +20,24 @@
       cursor: pointer;
     }
   </style>
+
+  <!-- OneSignal SDK -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "1866aa17-dd5b-4a6b-be26-5007328cc164", // seu app ID do OneSignal
+        notifyButton: {
+          enable: true // botão de inscrição visível se quiser
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <h2>UTMify Notificações Automáticas</h2>
-  <p>Deixe esta aba aberta no Safari para receber notificações automáticas.</p>
+  <p>Permita as notificações e deixe o site aberto ou feche o Safari após permitir. As notificações continuarão.</p>
   <button id="startBtn">Ativar Notificações</button>
 
   <script>
@@ -47,7 +61,7 @@
         return;
       }
 
-      alert("Notificações ativadas! Deixe essa aba aberta.");
+      alert("Notificações ativadas! Deixe essa aba aberta ou feche o Safari — você continuará recebendo.");
 
       startNotificacoesAutomaticas();
     });
